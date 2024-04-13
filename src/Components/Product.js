@@ -1,6 +1,18 @@
-import React, { useState } from 'react';
+import { useDispatch, useSelector } from "react-redux";
+import {add ,remove} from "../redux/Slices/CartSlice.js";
 
-const Product = ({ post }) => {
+const Product = ({post}) => {
+
+    const {cart=[]} = useSelector((state) => state);
+    const dispatch = useDispatch();
+
+    const addToCart = () => {
+        dispatch(add(post));
+    }
+
+    const removeFromCart = () => {
+        dispatch(remove(post.id));
+    }
 
     return (
         <div className="flex flex-col items-center justify-between 
@@ -13,23 +25,36 @@ const Product = ({ post }) => {
             </div>
 
             <div className=" my-[5px] h-[180px]">
-                <img src={post.image} alt={post.title} className="h-full w-full" />
+                <img src={post.image} alt= 'a' className="h-full w-full" />
             </div>
+
+            <div className="flex justify-between gap-12 items-center w-full mt-5">
             <div>
               <p className="text-green-600 font-semibold">${post.price}</p>
             </div>
 
             {
-          <button
-          className="text-gray-700 border-2 border-gray-700 rounded-full font-semibold 
-          text-[12px] p-1 px-3 uppercase 
-          hover:bg-gray-700
-          hover:text-white transition duration-300 ease-in">
-           {
-            false ? <p>Remove Item</p> : <p>Add to Cart</p>
-           }
-          </button>
+            cart.some((p) => p.id == post.id) ?
+            (<button
+            className="text-gray-700 border-2 border-gray-700 rounded-full font-semibold 
+            text-[12px] p-1 px-3 uppercase 
+            hover:bg-gray-700
+            hover:text-white transition duration-300 ease-in"
+            onClick={removeFromCart}
+            >
+            Remove Item
+            </button>) :
+            (<button
+             className="text-gray-700 border-2 border-gray-700 rounded-full font-semibold 
+             text-[12px] p-1 px-3 uppercase 
+             hover:bg-gray-700
+             hover:text-white transition duration-300 ease-in"
+             onClick={addToCart}
+             >
+             Add to cart
+            </button>)
             }
+            </div>
         
         </div>
     );
